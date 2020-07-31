@@ -1,7 +1,12 @@
-var { app, BrowserWindow } = require("electron");
-var isDev = require("electron-is-dev");
-var path = require("path");
+const { app, BrowserWindow, Menu, ipcMain } = require("electron");
+const isDev = require("electron-is-dev");
+const path = require("path");
 
+const menu = require('./menu.js')
+const selectDir = require('./select-dirs.js')
+const setProjectManager = require('./set-project-manager.js')
+
+global.projectManager = null
 var mainWindow;
 
 function createWindow() {
@@ -10,7 +15,8 @@ function createWindow() {
     kiosk: !isDev,
     resizable: true,
     webPreferences: {
-        nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
     }
   });
   if (isDev) {
@@ -25,7 +31,13 @@ function createWindow() {
   });
 }
 
-app.on('ready', createWindow);
+ipcMain.on('selectDir', selectDir)
+ipcMain.on('setProjectManager', setProjectManager)
+
+app.on('ready', () => {
+  createWindow()
+  Menu.setApplicationMenu(menu)
+})
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

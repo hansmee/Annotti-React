@@ -8,7 +8,7 @@
     "name": "DDobby",
     "email": "ddobbyisfree@gmail.com"
   },
-  "main": "public/main.js",
+  "main": "src/main/main.js",
   "scripts": {
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
