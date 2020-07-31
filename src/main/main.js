@@ -1,12 +1,12 @@
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
-const isDev = require("electron-is-dev");
-const path = require("path");
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const isDev = require('electron-is-dev');
+const path = require('path');
 
-const menu = require('./menu.js')
-const selectDir = require('./select-dirs.js')
-const setProjectManager = require('./set-project-manager.js')
+const menu = require('./menu.js');
+const selectDir = require('./select-dirs.js');
+const setProjectManager = require('./set-project-manager.js');
 
-global.projectManager = null
+global.projectManager = null;
 var mainWindow;
 
 function createWindow() {
@@ -16,14 +16,13 @@ function createWindow() {
     resizable: true,
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true
-    }
+      enableRemoteModule: true,
+    },
   });
   if (isDev) {
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
-  }
-  else {
+  } else {
     mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
   }
   mainWindow.on('closed', function () {
@@ -31,13 +30,14 @@ function createWindow() {
   });
 }
 
-ipcMain.on('selectDir', selectDir)
-ipcMain.on('setProjectManager', setProjectManager)
+ipcMain.on('selectDir', selectDir);
+ipcMain.on('setProjectManager', setProjectManager);
 
 app.on('ready', () => {
-  createWindow()
-  Menu.setApplicationMenu(menu)
-})
+  createWindow();
+  Menu.setApplicationMenu(menu);
+});
+
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
