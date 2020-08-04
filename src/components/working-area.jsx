@@ -10,6 +10,7 @@ import folderImg from '../imgs/folder.png';
 const fs = window.require('fs');
 const path = require('path');
 const { remote } = window.require('electron');
+const taskId = remote.getGlobal('projectManager').taskId;
 
 class FileGridView extends React.Component {
   constructor(props) {
@@ -178,17 +179,17 @@ class MainView extends React.Component {
   }
 
   render() {
-    if (this.props.task === 'IC') {
+    if (taskId === 'IC') {
       return (
         <div className="main-view">
-          <BreadCrumb task="IC"></BreadCrumb>
+          <BreadCrumb></BreadCrumb>
           <FileGridView
             dataInfos={this.state.dataInfos}
             customClickFolderEvent={this.clickFolder}
           ></FileGridView>
         </div>
       );
-    } else if (this.props.task === 'OD') {
+    } else if (taskId === 'OD') {
       return (
         <div className="main-view">
           <FileGridView
@@ -202,17 +203,17 @@ class MainView extends React.Component {
 }
 
 function WorkingArea(props) {
-  if (props.task === 'IC') {
+  if (taskId === 'IC') {
     return (
       <div className="working-area">
-        <MainView task="IC"></MainView>
+        <MainView></MainView>
         <LabelMenu></LabelMenu>
       </div>
     );
-  } else if (props.task === 'OD') {
+  } else if (taskId === 'OD') {
     return (
       <div className="working-area">
-        <MainView task="OD"></MainView>
+        <MainView></MainView>
       </div>
     );
   }

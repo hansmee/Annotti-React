@@ -4,13 +4,14 @@ import { HomeOutlined } from '@ant-design/icons';
 
 const path = require('path');
 const { remote } = window.require('electron');
+const taskId = remote.getGlobal('projectManager').taskId;
+const workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
 
 class BreadCrumb extends Component {
   constructor(props) {
     super(props);
-    var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
     var filePath =
-      props.task === 'IC'
+      taskId === 'IC'
         ? workingDirectory
         : props.filePath.substring(path.dirname(workingDirectory).length);
     var dirList = filePath.split('/' || '\\');
@@ -20,9 +21,8 @@ class BreadCrumb extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.filePath !== prevProps.filePath) {
-      var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
       var filePath =
-        this.props.task === 'IC'
+        taskId === 'IC'
           ? workingDirectory
           : this.props.filePath.substring(path.dirname(workingDirectory).length);
       var dirList = filePath.split('/' || '\\');

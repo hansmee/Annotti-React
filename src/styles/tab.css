@@ -2,7 +2,7 @@ div.tab-area {
   flex: 1;
 }
 
-ul.nav.nav-tabs {
+ul.nav-tabs {
   height: 42px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -10,17 +10,14 @@ ul.nav.nav-tabs {
   border: 0;
 }
 
-ul.nav > li {
+ul.nav-tabs > li {
+  width: 180px;
+  float: none;
   display: inline-block;
   white-space: nowrap;
   border-radius: 4px 4px 0 0;
   border: 1px solid #ddd;
   background-color: #c2e2ff;
-}
-
-ul.nav-tabs > li {
-  width: 150px;
-  float: none;
 }
 
 ul.nav-tabs > li:hover,
@@ -30,10 +27,12 @@ ul.nav-tabs > li:hover > a {
 }
 
 ul.nav-tabs > li > a {
-  width: 100px;
+  width: 145px;
   color: grey;
-  margin: 0;
   display: inline-block;
+  padding-left: 10px;
+  padding-right: 0;
+  margin: 0;
   border: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -54,7 +53,9 @@ ul.nav-tabs > li.active > a:hover {
   border: 0;
 }
 button.close {
-  padding-right: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  padding-right: 10px;
 }
 
 div.tab-contents {
@@ -65,8 +66,24 @@ div.tab-contents {
   background-color: white;
 }
 
-section.panel {
+div.panel {
   flex: 1;
+  margin: 0;
+}
+
+div.bottom-menu {
+  width: 50%;
+  position: absolute;
+  /* z-index: 1; */
+  bottom: 10px;
+  left: 25%;
+  padding: 10px 20px 10px 20px;
+  background-color: aliceblue;
+  display: grid;
+}
+
+Button.bottom-button {
+  width: 100px;
   margin: 0;
 }
 
