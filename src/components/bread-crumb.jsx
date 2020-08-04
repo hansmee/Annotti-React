@@ -13,14 +13,28 @@ class BreadCrumb extends Component {
       props.task === 'IC'
         ? workingDirectory
         : props.filePath.substring(path.dirname(workingDirectory).length);
-    console.log(filePath, workingDirectory);
     var dirList = filePath.split('/' || '\\');
 
     this.state = { dirList: dirList, rootDir: path.basename(workingDirectory) };
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.filePath !== prevProps.filePath) {
+      var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+      var filePath =
+        this.props.task === 'IC'
+          ? workingDirectory
+          : this.props.filePath.substring(path.dirname(workingDirectory).length);
+      var dirList = filePath.split('/' || '\\');
+      this.setState({
+        dirList: dirList,
+        rootDir: path.basename(workingDirectory),
+      });
+    }
+  }
+
   render() {
-    const dirList = this.state.dirList;
+    const { dirList } = this.state;
     const elements = dirList.map((dir, idx) => {
       if (dir === this.state.rootDir) {
         return (
