@@ -40,15 +40,22 @@ class FileGridView extends React.Component {
     const tab = {
       dataInfo: dataInfo,
       title: path.basename(dataInfo.dataPath),
-      isActive: true,
       content: null,
     };
     const { tabData } = this.state;
-    this.setState({
-      isGridView: false,
-      tabData: tabData.concat(tab),
-      activeTab: tab,
-    });
+    const sameElemIdx = tabData.findIndex((t) => t.dataInfo === tab.dataInfo);
+    if (sameElemIdx === -1) {
+      this.setState({
+        isGridView: false,
+        tabData: [tab].concat(tabData),
+        activeTab: tab,
+      });
+    } else {
+      this.setState({
+        isGridView: false,
+        activeTab: tabData[sameElemIdx],
+      });
+    }
   }
 
   removeTab(tab, e) {
@@ -174,7 +181,7 @@ class MainView extends React.Component {
     if (this.props.task === 'IC') {
       return (
         <div className="main-view">
-          <BreadCrumb filePath={this.workingDirectory}></BreadCrumb>
+          <BreadCrumb task="IC"></BreadCrumb>
           <FileGridView
             dataInfos={this.state.dataInfos}
             customClickFolderEvent={this.clickFolder}

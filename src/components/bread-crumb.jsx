@@ -8,8 +8,12 @@ const { remote } = window.require('electron');
 class BreadCrumb extends Component {
   constructor(props) {
     super(props);
-    var workingDirectory = remote.getGlobal('projectManager').workingDirectory;
-    var filePath = props.filePath.substring(path.dirname(workingDirectory).length);
+    var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+    var filePath =
+      props.task === 'IC'
+        ? workingDirectory
+        : props.filePath.substring(path.dirname(workingDirectory).length);
+    console.log(filePath, workingDirectory);
     var dirList = filePath.split('/' || '\\');
 
     this.state = { dirList: dirList, rootDir: path.basename(workingDirectory) };
