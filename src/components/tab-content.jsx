@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import BreadCrumb from './bread-crumb';
+import LabelMenu from './labels';
 import { Button } from 'antd';
 
 const { remote } = window.require('electron');
-const taskId = remote.getGlobal('projectManager').taskId;
 
 class BottomMenu extends Component {
   constructor(props) {
     super(props);
 
+    const taskId = remote.getGlobal('projectManager').taskId;
     var btnList = [];
     if (taskId === 'OD') {
       btnList = [
@@ -51,9 +52,10 @@ class Content extends Component {
       <div className="tab-contents">
         <BreadCrumb filePath={this.props.filePath} breadClick={this.props.breadClick}></BreadCrumb>
         <div className="panel">
-          <p className="panel-heading">{this.props.activeTab.title}</p>
-          <p className="panel-body">{this.props.activeTab.content}</p>
-          <BottomMenu />
+          <div className="canvas-img">
+            <BottomMenu />
+          </div>
+          <LabelMenu />
         </div>
       </div>
     );

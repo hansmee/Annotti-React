@@ -10,7 +10,6 @@ import folderImg from '../imgs/folder.png';
 const fs = window.require('fs');
 const path = require('path');
 const { remote } = window.require('electron');
-const taskId = remote.getGlobal('projectManager').taskId;
 
 class FileGridView extends React.Component {
   constructor(props) {
@@ -179,6 +178,7 @@ class MainView extends React.Component {
   }
 
   render() {
+    const taskId = remote.getGlobal('projectManager').taskId;
     if (taskId === 'IC') {
       return (
         <div className="main-view">
@@ -203,6 +203,7 @@ class MainView extends React.Component {
 }
 
 function WorkingArea(props) {
+  const taskId = remote.getGlobal('projectManager').taskId;
   if (taskId === 'IC') {
     return (
       <div className="working-area">
