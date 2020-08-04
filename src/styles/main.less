@@ -65,11 +65,13 @@ div.working-area {
 div.main-view {
   height: 100%;
   background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
   flex: 1;
 }
+
 div.grid-view {
   height: 100%;
-  width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   background-color: aliceblue;
@@ -82,4 +84,21 @@ div.label-menu {
   height: 100%;
   flex-basis: 200px;
   background-color: rgb(51, 88, 255);
+}
+
+div.img-info {
+  width: 120px;
+  height: 120px;
+}
+a.img-name {
+  width: 90px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ant-breadcrumb {
+  height: 30px;
+  padding: 3px;
+  padding-left: 10px;
 }

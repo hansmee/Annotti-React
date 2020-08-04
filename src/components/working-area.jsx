@@ -1,8 +1,9 @@
 import React from 'react';
 import '../styles/main.less';
 import LabelMenu from './labels';
-import { Breadcrumb } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
+import Tabs from './tab';
+import Content from './tab-content';
+import BreadCrumb from './bread-crumb';
 import { imgExtensions } from '../utils/exts';
 import folderImg from '../imgs/folder.png';
 
@@ -10,68 +11,125 @@ const fs = window.require('fs');
 const path = require('path');
 const { remote } = window.require('electron');
 
-function TabList() {
-  // 열려있는 탭 목록
-  return <h1>TabList</h1>;
-}
+class FileGridView extends React.Component {
+  constructor(props) {
+    super(props);
 
-function BreadCrumb(props) {
-  // 선택된 파일 경로
-  return (
-    <Breadcrumb>
-      <Breadcrumb.Item href="" onClick={props.customClickEvent}>
-        <HomeOutlined />
-      </Breadcrumb.Item>
-      <Breadcrumb.Item href="">
-        <span>Application List</span>
-      </Breadcrumb.Item>
-      <Breadcrumb.Item>Application</Breadcrumb.Item>
-    </Breadcrumb>
-  );
-}
+    var tabData = [];
+    this.state = {
+      isGridView: true,
+      tabData: tabData,
+      activeTab: null,
+    };
 
-// function SingleImgView() {
-//   // Canves
-//   return <h1>DataView</h1>;
-// }
+    this.showGridView = this.showGridView.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.addTab = this.addTab.bind(this);
+    this.removeTab = this.removeTab.bind(this);
+  }
 
-function FileGridView(props) {
-  const dataInfos = props.dataInfos;
-  const elements = dataInfos.map((dataInfo) => {
-    if (dataInfo.isDir)
-      return (
-        <div className="folder-info" key={dataInfo.dataPath}>
-          <img
-            className="folder-thumbnail"
-            id={dataInfo.dataPath}
-            src={folderImg}
-            style={{ display: 'block', width: '80px', height: '80px' }}
-            alt={dataInfo.dataPath}
-            onClick={props.customClickFolderEvent}
-          ></img>
-          <a href="/" className="img-name">
-            {path.basename(dataInfo.dataPath)}
-          </a>
-        </div>
-      );
-    else {
-      return (
-        <div className="img-info" key={dataInfo.dataPath} id={dataInfo.imgInfoId}>
-          <img
-            className="thumbnail"
+  showGridView() {
+    this.setState({ isGridView: true });
+  }
+
+  handleClick(tab) {
+    this.setState({ activeTab: tab });
+  }
+
+  addTab(dataInfo) {
+    const tab = {
+      dataInfo: dataInfo,
+      title: path.basename(dataInfo.dataPath),
+      isActive: true,
+      content: null,
+    };
+    const { tabData } = this.state;
+    this.setState({
+      isGridView: false,
+      tabData: tabData.concat(tab),
+      activeTab: tab,
+    });
+  }
+
+  removeTab(tab, e) {
+    e.stopPropagation();
+    const { tabData } = this.state;
+    if (tabData.length > 1) {
+      this.setState({
+        tabData: tabData.filter((element) => element.title !== tab.title),
+        activeTab: tabData[(tabData.findIndex((element) => element === tab) + 1) % tabData.length],
+      });
+    } else if (tabData.length === 1) {
+      this.setState({
+        isGridView: true,
+        tabData: tabData.filter((element) => element.title !== tab.title),
+        activeTab: null,
+      });
+    }
+  }
+
+  render() {
+    const dataInfos = this.props.dataInfos;
+    const elements = dataInfos.map((dataInfo) => {
+      if (dataInfo.isDir)
+        return (
+          <div className="folder-info" key={dataInfo.dataPath}>
+            <img
+              className="folder-thumbnail"
+              id={dataInfo.dataPath}
+              src={folderImg}
+              style={{ display: 'block', width: '80px', height: '80px' }}
+              alt={dataInfo.dataPath}
+              onClick={this.props.customClickFolderEvent}
+            ></img>
+            <a href="/" className="img-name">
+              {path.basename(dataInfo.dataPath)}
+            </a>
+          </div>
+        );
+      else {
+        return (
+          <div
+            className="img-info"
+            key={dataInfo.dataPath}
             id={dataInfo.imgInfoId}
-            src={dataInfo.dataPath}
-            style={{ display: 'block', width: '80px', height: '80px' }}
-            alt={dataInfo.dataPath}
-          ></img>
-          <a href="/" className="img-name">
-            {path.basename(dataInfo.dataPath)}
-          </a>
+            onClick={() => this.addTab(dataInfo)}
+          >
+            <img
+              className="thumbnail"
+              id={dataInfo.imgInfoId}
+              src={dataInfo.dataPath}
+              style={{ display: 'block', width: '80px', height: '80px' }}
+              // alt={dataInfo.dataPath}
+              alt={''}
+            ></img>
+            <a href="/" className="img-name">
+              {path.basename(dataInfo.dataPath)}
+            </a>
+          </div>
+        );
+      }
+    });
+    if (this.state.isGridView) {
+      return <div className="grid-view">{elements}</div>;
+    } else {
+      return (
+        <div className="tab-area">
+          <Tabs
+            activeTab={this.state.activeTab}
+            changeTab={this.handleClick}
+            tabData={this.state.tabData}
+            removeTab={this.removeTab}
+          />
+          <Content
+            activeTab={this.state.activeTab}
+            filePath={this.state.activeTab.dataInfo.dataPath}
+            breadClick={this.showGridView}
+          />
         </div>
       );
     }
-  });
-  return <div className="grid-view">{elements}</div>;
+  }
 }
 
 class MainView extends React.Component {
@@ -113,26 +171,44 @@ class MainView extends React.Component {
   }
 
   render() {
-    return (
-      <div className="main-view">
-        <TabList></TabList>
-        <BreadCrumb></BreadCrumb>
-        <FileGridView
-          dataInfos={this.state.dataInfos}
-          customClickFolderEvent={this.clickFolder}
-        ></FileGridView>
-      </div>
-    );
+    if (this.props.task === 'IC') {
+      return (
+        <div className="main-view">
+          <BreadCrumb filePath={this.workingDirectory}></BreadCrumb>
+          <FileGridView
+            dataInfos={this.state.dataInfos}
+            customClickFolderEvent={this.clickFolder}
+          ></FileGridView>
+        </div>
+      );
+    } else if (this.props.task === 'OD') {
+      return (
+        <div className="main-view">
+          <FileGridView
+            dataInfos={this.state.dataInfos}
+            customClickFolderEvent={this.clickFolder}
+          ></FileGridView>
+        </div>
+      );
+    }
   }
 }
 
-function WorkingArea() {
-  return (
-    <div className="working-area">
-      <MainView></MainView>
-      <LabelMenu></LabelMenu>
-    </div>
-  );
+function WorkingArea(props) {
+  if (props.task === 'IC') {
+    return (
+      <div className="working-area">
+        <MainView task="IC"></MainView>
+        <LabelMenu></LabelMenu>
+      </div>
+    );
+  } else if (props.task === 'OD') {
+    return (
+      <div className="working-area">
+        <MainView task="OD"></MainView>
+      </div>
+    );
+  }
 }
 
 export default WorkingArea;
