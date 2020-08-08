@@ -5,7 +5,7 @@ import WorkingArea from './working-area';
 
 function Detection() {
   return (
-    <div className="container">
+    <div className="main-container">
       <LeftMenu></LeftMenu>
       <WorkingArea task="OD"></WorkingArea>
     </div>

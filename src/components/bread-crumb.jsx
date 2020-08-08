@@ -9,24 +9,31 @@ class BreadCrumb extends Component {
   constructor(props) {
     super(props);
     const taskId = remote.getGlobal('projectManager').taskId;
-    const workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+    var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+    while (workingDirectory.includes('\\')) {
+      workingDirectory = workingDirectory.replace('\\', '/');
+    }
     var filePath =
       taskId === 'IC'
         ? workingDirectory
-        : props.filePath.substring(path.dirname(workingDirectory).length);
-    var dirList = filePath.split('/' || '\\');
+        : workingDirectory + '/' + (props.filePath ? path.dirname(props.filePath) : '');
 
+    //filePath = filePath.substring(path.dirname(workingDirectory).length);
+    var dirList = filePath.split('/' || '\\');
     this.state = { dirList: dirList, rootDir: path.basename(workingDirectory) };
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.filePath !== prevProps.filePath) {
       const taskId = remote.getGlobal('projectManager').taskId;
-      const workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+      var workingDirectory = remote.getGlobal('projectManager').workingDirectory[0];
+      while (workingDirectory.includes('\\')) {
+        workingDirectory = workingDirectory.replace('\\', '/');
+      }
       var filePath =
         taskId === 'IC'
           ? workingDirectory
-          : this.props.filePath.substring(path.dirname(workingDirectory).length);
+          : workingDirectory + '/' + (this.props.filePath ? path.dirname(this.props.filePath) : '');
       var dirList = filePath.split('/' || '\\');
       this.setState({
         dirList: dirList,

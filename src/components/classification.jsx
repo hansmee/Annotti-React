@@ -5,7 +5,7 @@ import WorkingArea from './working-area';
 
 function Classification() {
   return (
-    <div className="container">
+    <div className="main-container">
       <LeftMenu></LeftMenu>
       <WorkingArea task="IC"></WorkingArea>
     </div>

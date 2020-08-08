@@ -5,7 +5,9 @@ class Tab extends Component {
   render() {
     return (
       <li onClick={this.props.handleClick} className={this.props.isActive ? 'active' : null}>
-        <a href="#">{this.props.data.title}</a>
+        <a href="#!" title={this.props.data.title}>
+          {this.props.data.title}
+        </a>
         <button className="close" type="button" title="Remove page" onClick={this.props.removeTab}>
           ×
         </button>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BreadCrumb from './bread-crumb';
 import LabelMenu from './labels';
+import Canvas from './canvas';
 import { Button } from 'antd';
 
 const { remote } = window.require('electron');
@@ -27,7 +28,7 @@ class BottomMenu extends Component {
   }
 
   render() {
-    if (this.state.btnList.length == 0) {
+    if (this.state.btnList.length === 0) {
       return null;
     } else {
       const repVal = 'repeat(' + this.state.btnList.length + ',1fr)';
@@ -50,13 +51,17 @@ class Content extends Component {
   render() {
     return (
       <div className="tab-contents">
-        <BreadCrumb filePath={this.props.filePath} breadClick={this.props.breadClick}></BreadCrumb>
         <div className="panel">
+          <BreadCrumb
+            filePath={this.props.filePath}
+            breadClick={this.props.breadClick}
+          ></BreadCrumb>
           <div className="canvas-img">
+            <Canvas filePath={this.props.filePath} />
             <BottomMenu />
           </div>
-          <LabelMenu />
         </div>
+        <LabelMenu />
       </div>
     );
   }
