@@ -111,7 +111,8 @@ class FileGridView extends React.Component {
               alt={''}
             ></img>
             <a href="/" className="img-name">
-              {dataInfo.fileName}
+              {/* {dataInfo.fileName} */}
+              {path.basename(dataInfo.dataPath)}
             </a>
           </div>
         );
@@ -156,40 +157,40 @@ class MainView extends React.Component {
   async readFolder(folderPath) {
     var dataInfos = [];
     var dataPaths = [];
-    // var dir = await fs.promises.opendir(folderPath);
-    // for await (const dirent of dir) {
-    //   var dataPath = path.resolve(folderPath, dirent.name);
-    //   if (imgExtensions.includes(path.extname(dataPath))) {
-    //     if (dirent.isDirectory()) {
-    //       dataInfos.push({ dataPath: dataPath, isDir: 1 });
-    //     } else {
-    //       dataInfos.push({ dataPath: dataPath, isDir: 0, imgInfoId: this.id++ });
-    //       dataPaths.push(dataPath);
-    //     }
-    //   }
-    // }
-    fs.readdir(folderPath, async (err, files) => {
-      var isWindows = folderPath.includes('\\') ? true : false;
-      await files.forEach((fileName) => {
-        var dataPath = path.resolve(folderPath, fileName).replace(/\\/g, '/');
-        if (isWindows) {
-          while (dataPath.includes('/')) {
-            dataPath = dataPath.replace(new RegExp('/'), '\\');
-          }
-        }
-        if (imgExtensions.includes(path.extname(fileName))) {
-          dataInfos.push({
-            dataPath: dataPath,
-            isDir: 0,
-            imgInfoId: this.id++,
-            fileName: fileName,
-          });
+    var dir = await fs.promises.opendir(folderPath);
+    for await (const dirent of dir) {
+      var dataPath = path.resolve(folderPath, dirent.name);
+      if (imgExtensions.includes(path.extname(dataPath))) {
+        if (dirent.isDirectory()) {
+          dataInfos.push({ dataPath: dataPath, isDir: 1 });
+        } else {
+          dataInfos.push({ dataPath: dataPath, isDir: 0, imgInfoId: this.id++ });
           dataPaths.push(dataPath);
         }
-      });
-      remote.getGlobal('projectManager').appendDataPaths(dataPaths);
-      this.setState({ dataInfos: dataInfos });
-    });
+      }
+    }
+    // fs.readdir(folderPath, async (err, files) => {
+    //   var isWindows = folderPath.includes('\\') ? true : false;
+    //   await files.forEach((fileName) => {
+    //     var dataPath = path.resolve(folderPath, fileName).replace(/\\/g, '/');
+    //     if (isWindows) {
+    //       while (dataPath.includes('/')) {
+    //         dataPath = dataPath.replace(new RegExp('/'), '\\');
+    //       }
+    //     }
+    //     if (imgExtensions.includes(path.extname(fileName))) {
+    //       dataInfos.push({
+    //         dataPath: dataPath,
+    //         isDir: 0,
+    //         imgInfoId: this.id++,
+    //         fileName: fileName,
+    //       });
+    //       dataPaths.push(dataPath);
+    //     }
+    //   });
+    //   remote.getGlobal('projectManager').appendDataPaths(dataPaths);
+    //   this.setState({ dataInfos: dataInfos });
+    // });
     remote.getGlobal('projectManager').appendDataPaths(dataPaths);
     this.setState({ dataInfos: dataInfos });
   }

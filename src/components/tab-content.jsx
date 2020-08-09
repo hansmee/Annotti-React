@@ -57,7 +57,7 @@ class Content extends Component {
             breadClick={this.props.breadClick}
           ></BreadCrumb>
           <div className="canvas-img">
-            <Canvas filePath={this.props.filePath} />
+            <Canvas filePath={this.props.filePath} activeTab={this.props.activeTab} />
             <BottomMenu />
           </div>
         </div>

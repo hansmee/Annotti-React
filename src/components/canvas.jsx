@@ -3,26 +3,43 @@ import React, { useState, useRef, useEffect } from 'react';
 import imgPath from '../imgs/analysis.png';
 
 function Canvas(props) {
-  const [filePath] = useState(props.filePath);
+  const [filePath, setFilePath] = useState(props.filePath);
   const [parentSize, setParentSize] = useState({ x: 1, y: 1 });
+  const [refs] = useState({ canvasRef: useRef(), divRef: useRef() });
+  const [canvasInfo, setCanvasInfo] = useState({
+    canvas: null,
+    ctx: null,
+    img: new Image(),
+    ratio: 1,
+    imgSize: { w: 0, h: 0 },
+  });
 
-  let canvasRef = useRef();
-  let divRef = useRef();
+  let scaleFactor = 1.05;
 
+  // var canInfo = {
+  //   canvas: null,
+  //   ctx: null,
+  //   img: new Image(),
+  //   ratio: 1,
+  //   imgSize: { w: 0, h: 0 },
+  // };
+
+  // all rendering
   useEffect(() => {
-    let canvas, ctx, img, ratio, w, h;
-    let scaleFactor = 1.05;
-    let imgSize = { w: 0, h: 0 };
+    const { canvasRef, divRef } = refs;
+    var { canvas, ctx, img, ratio, imgSize } = canvasInfo;
+    setFilePath(props.filePath);
 
     canvas = canvasRef.current;
     ctx = canvas.getContext('2d');
+
     trackTransforms(ctx);
-    img = new Image();
+
     //img.src = filePath;
     img.src = imgPath;
 
-    w = divRef.current.offsetWidth;
-    h = divRef.current.offsetHeight;
+    var w = divRef.current.offsetWidth;
+    var h = divRef.current.offsetHeight;
     parentSize.x = w;
     parentSize.y = h;
     canvas.width = w;
@@ -130,8 +147,16 @@ function Canvas(props) {
     function getSize() {
       setParentSize({ x: divRef.current.offsetWidth, y: divRef.current.offsetHeight });
     }
-    window.addEventListener('resize', getSize);
 
+    // canInfo = {
+    //   canvas,
+    //   ctx,
+    //   img,
+    //   ratio,
+    //   imgSize,
+    // };
+
+    window.addEventListener('resize', getSize);
     // add moving events
     canvas.addEventListener('mousedown', mouseDown, false);
     canvas.addEventListener('mousemove', mouseMove, false);
@@ -148,13 +173,15 @@ function Canvas(props) {
       canvas.removeEventListener('DOMMouseScroll', handleScroll, false);
       canvas.removeEventListener('mousewheel', handleScroll, false);
     };
-  }, [parentSize, filePath]);
+  }, [refs, canvasInfo, props.filePath, parentSize.x, parentSize.y, scaleFactor]);
 
-  console.log('render canvas');
+  // useEffect(() => {
+  //   setCanvasInfo((canvasInfo) => Object.assign(canvasInfo, canInfo));
+  // }, []);
+
   return (
-    <div className="img-div" ref={divRef}>
-      <p>{props.filePath}</p>
-      <canvas ref={canvasRef}></canvas>
+    <div className="img-div" ref={refs.divRef} id={props.activeTab.dataInfo.imgInfoId}>
+      <canvas ref={refs.canvasRef} id={props.activeTab.dataInfo.imgInfoId}></canvas>
     </div>
   );
 }
