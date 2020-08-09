@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Input, Button, Select } from 'antd';
 import '../styles/main.less';
 import Classification from './classification';
+import Detection from './detection';
 
 const { remote, ipcRenderer } = window.require('electron');
 const { Option } = Select;
@@ -89,6 +90,8 @@ class CreateProject extends React.Component {
       ReactDOM.unmountComponentAtNode(document.getElementById('root'));
       if (this.taskId === 'IC') {
         ReactDOM.render(<Classification />, document.getElementById('root'));
+      } else if (this.taskId === 'OD') {
+        ReactDOM.render(<Detection />, document.getElementById('root'));
       } else {
         console.log('Other than classification');
       }
