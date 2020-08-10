@@ -72,8 +72,10 @@ class CreateProject extends React.Component {
   constructor(props) {
     super(props);
     this.projectName = 'DEBUG'; // null;
-    this.taskId = 'IC'; // null;
-    this.workingDirectory = ['/Users/yeon/Downloads/bwh', '/Users/yeon/Downloads/modify_bwh_w']; // "None";
+    // this.taskId = 'IC'; // null;
+    // this.workingDirectory = ['/Users/yeon/Downloads/bwh', '/Users/yeon/Downloads/modify_bwh_w']; // "None";
+    this.taskId = 'OD';
+    this.workingDirectory = ['C:\\Users\\user\\Desktop\\배경화면\\bts'];
 
     this.setProjectName = this.setProjectName.bind(this);
     this.selectTask = this.selectTask.bind(this);
