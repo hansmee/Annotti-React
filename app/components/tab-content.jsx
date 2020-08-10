@@ -47,24 +47,19 @@ class BottomMenu extends Component {
   }
 }
 
-class Content extends Component {
-  render() {
-    return (
-      <div className="tab-contents">
-        <div className="panel">
-          <BreadCrumb
-            filePath={this.props.filePath}
-            breadClick={this.props.breadClick}
-          ></BreadCrumb>
-          <div className="canvas-img">
-            <Canvas filePath={this.props.filePath} activeTab={this.props.activeTab} />
-            <BottomMenu />
-          </div>
+function Content(props) {
+  return (
+    <div className="tab-contents">
+      <div className="panel">
+        <BreadCrumb filePath={props.filePath} breadClick={props.breadClick}></BreadCrumb>
+        <div className="canvas-img">
+          <Canvas filePath={props.filePath} activeTab={props.activeTab} />
+          <BottomMenu />
         </div>
-        <LabelMenu />
       </div>
-    );
-  }
+      <LabelMenu />
+    </div>
+  );
 }
 
 export default Content;

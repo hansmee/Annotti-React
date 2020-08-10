@@ -36,6 +36,8 @@ class FileGridView extends React.Component {
   }
 
   addTab(dataInfo) {
+    const taskId = remote.getGlobal('projectManager').taskId;
+    if (taskId === 'IC') return;
     const tab = {
       dataInfo: dataInfo,
       title: path.basename(dataInfo.dataPath),
@@ -106,11 +108,9 @@ class FileGridView extends React.Component {
               id={dataInfo.imgInfoId}
               src={dataInfo.dataPath}
               style={{ display: 'block', width: '80px', height: '80px' }}
-              // alt={dataInfo.dataPath}
-              alt={''}
+              alt={dataInfo.dataPath}
             ></img>
             <a href="/" className="img-name">
-              {/* {dataInfo.fileName} */}
               {path.basename(dataInfo.dataPath)}
             </a>
           </div>
@@ -168,28 +168,6 @@ class MainView extends React.Component {
         }
       }
     }
-    // fs.readdir(folderPath, async (err, files) => {
-    //   var isWindows = folderPath.includes('\\') ? true : false;
-    //   await files.forEach((fileName) => {
-    //     var dataPath = path.resolve(folderPath, fileName).replace(/\\/g, '/');
-    //     if (isWindows) {
-    //       while (dataPath.includes('/')) {
-    //         dataPath = dataPath.replace(new RegExp('/'), '\\');
-    //       }
-    //     }
-    //     if (imgExtensions.includes(path.extname(fileName))) {
-    //       dataInfos.push({
-    //         dataPath: dataPath,
-    //         isDir: 0,
-    //         imgInfoId: this.id++,
-    //         fileName: fileName,
-    //       });
-    //       dataPaths.push(dataPath);
-    //     }
-    //   });
-    //   remote.getGlobal('projectManager').appendDataPaths(dataPaths);
-    //   this.setState({ dataInfos: dataInfos });
-    // });
     remote.getGlobal('projectManager').appendDataPaths(dataPaths);
     this.setState({ dataInfos: dataInfos });
   }

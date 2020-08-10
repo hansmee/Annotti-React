@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import imgPath from '../imgs/analysis.png';
-
 function Canvas(props) {
   const [filePath, setFilePath] = useState(props.filePath);
   const [parentSize, setParentSize] = useState({ x: 1, y: 1 });
@@ -35,8 +33,7 @@ function Canvas(props) {
 
     trackTransforms(ctx);
 
-    //img.src = filePath;
-    img.src = imgPath;
+    img.src = filePath;
 
     var w = divRef.current.offsetWidth;
     var h = divRef.current.offsetHeight;
